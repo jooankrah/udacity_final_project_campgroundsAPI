@@ -15,10 +15,10 @@ before_script:
 
 script:
   - docker --version # print the version for logging
-  - docker build -t finalProj-campgrounds-api .
-  - docker tag finalProj-campgrounds-api jooankrah/finalProj-campgrounds-api-image
+  - docker build -t finalproj-campgrounds-api .
+  - docker tag finalproj-campgrounds-api jooankrah/finalproj-campgrounds-api-image
 
 # Tasks to perform after the process is successful. Formatting the Docker username and password as below enables you to programmatically log in without having the password exposed in logs.
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push jooankrah/finalProj-campgrounds-api-image
+  - docker push jooankrah/finalproj-campgrounds-api-image
