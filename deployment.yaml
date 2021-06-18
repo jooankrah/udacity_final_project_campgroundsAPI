@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: finalproj-campgrounds-api
-          image: jooankrah/finalproj-campgrounds-api-image
+          image: jooankrah/finalproj-campgrounds-api-image:latest
           ports:
             - containerPort: 3000
