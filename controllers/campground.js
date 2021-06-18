@@ -1,10 +1,16 @@
+const { getGetSignedUrl, getPutSignedUrl } = require("../aws");
 const Campground = require("../models/campground");
 
-const getAllCampgrounds = (req, res) => {
+const getAllCampgrounds = async (req, res) => {
   Campground.find({}, (err, allCampgrounds) => {
     if (err) {
       return res.send(err);
     } else {
+      allCampgrounds.map((item) => {
+        if (item.image) {
+          item.image = getGetSignedUrl(item.image);
+        }
+      });
       return res.status(200).send({ allCampgrounds });
     }
   });
@@ -19,7 +25,8 @@ const createNewCampground = async (req, res) => {
   };
 
   try {
-    const newlyCreatedCampground = new Campground(req.body.campground);
+    console.log(req.body);
+    const newlyCreatedCampground = new Campground(req.body.Campground);
 
     newlyCreatedCampground.author = author;
 
@@ -34,7 +41,14 @@ const createNewCampground = async (req, res) => {
   }
 };
 
-const getCampground = (req, res) => {
+const newGetPutsignedUrl = async (req, res) => {
+  const fileId = req.query.fileId;
+  console.log(fileId);
+  const url = getPutSignedUrl(fileId);
+  return res.send({ url });
+};
+
+const getCampground = async (req, res) => {
   Campground.findById(req.query.id, function (err, foundCampground) {
     if (err) {
       return res.send(err);
@@ -42,12 +56,27 @@ const getCampground = (req, res) => {
     if (!foundCampground) {
       return res.send({ status: 404, error: "Campground not found" });
     } else {
+      foundCampground.image = getGetSignedUrl(foundCampground.image);
       return res.send({ status: 200, campground: foundCampground });
     }
   });
 };
 
-const updateCampground = (req, res) => {
+const getUsersCampground = async (req, res) => {
+  Campground.find({ "author.id": req.id }, (err, campgrounds) => {
+    if (err) {
+      return res.send(err);
+    }
+    campgrounds.map((item) => {
+      if (item.image) {
+        item.image = getGetSignedUrl(item.image);
+      }
+    });
+    res.send({ status: 200, campgrounds });
+  });
+};
+
+const updateCampground = async (req, res) => {
   const { name, price, image, description } = req.body.campground;
   console.log(req.body.campground);
   console.log(name, price, image, description);
@@ -68,7 +97,7 @@ const updateCampground = (req, res) => {
   );
 };
 
-const deleteCampground = (req, res) => {
+const deleteCampground = async (req, res) => {
   Campground.findByIdAndDelete(req.query.id, (err) => {
     if (err) {
       req.send(err);
@@ -81,7 +110,9 @@ const deleteCampground = (req, res) => {
 module.exports = {
   getAllCampgrounds,
   createNewCampground,
+  getUsersCampground,
   getCampground,
   updateCampground,
   deleteCampground,
+  newGetPutsignedUrl,
 };

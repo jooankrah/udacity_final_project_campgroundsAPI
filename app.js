@@ -4,6 +4,7 @@ const express = require("express"),
   expressSanitizer = require("express-sanitizer"),
   cors = require("cors");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 require("./db/mongoose");
 
 // Constant for environment variables and bindings
