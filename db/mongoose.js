@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 
-mongoose.connect(process.env.DB_HOST, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://jooankrah:Jonathan10@cluster0.qyjzk.mongodb.net/campground?retryWrites=true&w=majority&ssl=true",
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  }
+);
 
 const connection = mongoose.connection;
 
