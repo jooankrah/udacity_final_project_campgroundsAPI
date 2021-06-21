@@ -1,9 +1,10 @@
 const AWS = require("aws-sdk");
 
 // Configure AWS
-const credentials = new AWS.SharedIniFileCredentials({
-  profile: process.env.AWS_PROFILE,
-});
+const credentials = new AWS.Credentials(
+  process.env.AWS_KEY,
+  process.env.AWS_SECRET
+);
 AWS.config.credentials = credentials;
 
 const s3 = new AWS.S3({
